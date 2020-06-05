@@ -1,0 +1,21 @@
+{{- if and (eq .Values.cluster.provider "openshift") ( eq .Values.cluster.strictPermissions false) }}
+apiVersion: jenkins.io/v1
+kind: EnvironmentRoleBinding
+metadata:
+  name: tekton-bot-envrb
+  namespace: jx
+spec:
+  subjects: 
+  - name: tekton-bot
+    namespace: jx
+    kind: ServiceAccount
+  roleRef:
+    name: tekton-bot
+    apiGroup:  rbac.authorization.k8s.io
+    kind: Role
+  environments:
+  - includes:
+    - dev
+    - staging
+    - production
+{{- end }}
